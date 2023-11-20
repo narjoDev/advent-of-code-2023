@@ -1,7 +1,7 @@
 require_relative '../lib/file_utilities'
 
-EXAMPLE = read_file('input_example.txt')
-ACTUAL = read_file('input_actual.txt')
+EXAMPLE = lines_of(read_file('input_example.txt'))
+ACTUAL = lines_of(read_file('input_actual.txt'))
 
 def part_one(_input)
   'foo'

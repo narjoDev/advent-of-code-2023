@@ -1,5 +1,9 @@
 def read_file(filename)
-  File.read(filename).split("\n")
+  File.read(filename)
+end
+
+def lines_of(file_contents)
+  file_contents.split("\n")
 end
 
 def overwrite(filename, contents)
