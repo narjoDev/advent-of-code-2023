@@ -5,7 +5,7 @@ require_relative 'solution'
 # p(recover_value('a1b2c3d4e5f') == 15)
 # p(recover_value('treb7uchet') == 77)
 
-# p(part_one(EXAMPLE) == 142)
+# p(part_one(EXAMPLE_ONE) == 142)
 p(part_one(ACTUAL) == 55386)
 
 # p(recover_including_words('two1nine') == 29)
