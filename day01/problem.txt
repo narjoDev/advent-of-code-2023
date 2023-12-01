@@ -1,0 +1,26 @@
+Part One
+extract calibration value from each line
+combine first digit and last digit into a two digit number => value
+there can be other digits in between
+part one: what is the sum of all the values?
+
+map each line to its first and last digit
+  option 1: filter to only digits and get first and last
+  option 2: regular expression match digit with no digit before and digit with no digit after
+sum
+
+Part Two
+digits can be spelled out with letters
+
+need to scan line for either digits or spelled numbers
+
+IMPORTANT: there can be overlapping words! (twone) => keep BOTH
+z7onetwonec => 71
+
+option 2: 
+  have a single pattern that matches any digit word
+  while there's a match, replace first match
+  FLAW: doesn't handle overlapping words
+
+solution: fancy lookahead regex `(?=(pattern))`
+I can't say I completely understand this yet.
