@@ -3,7 +3,7 @@ def read_file(filename)
 end
 
 def lines_of(file_contents)
-  file_contents.split("\n")
+  file_contents.split(/\n/)
 end
 
 def overwrite(filename, contents)
