@@ -16,16 +16,12 @@ end
 
 def recover_including_words(line)
   digit_words = %w(zero one two three four five six seven eight nine)
-  digits = Array(0..9).map(&:to_s)
-  including_digits = digit_words + digits
-  pattern = Regexp.new("(?=(#{including_digits.join('|')}))")
-  # pattern = /(?=(zero|one|two|three|four|five|six|seven|eight|nine|0|1|2|3|4|5|6|7|8|9))/
+  pattern = /(?=(zero|one|two|three|four|five|six|seven|eight|nine|\d))/
 
-  all_matches = line.scan(pattern).flatten
-  keep = [all_matches.first, all_matches.last]
-  keep.map! { |match| digit_words.index(match) || match }
-
-  keep.join.to_i
+  matches = line.scan(pattern).flatten
+  first_and_last = [matches.first, matches.last]
+  first_and_last.map { |match| digit_words.index(match) || match }
+                .join.to_i
 end
 
 def part_two(input)
