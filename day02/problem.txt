@@ -53,3 +53,19 @@ main
   map each line to a 2-element array (helper: parse_game(line))
   filter games by possibility (helper: possible_from_bag?(game, bag))
   calculate sum of IDs
+
+PART TWO
+fewest required cubes of each color is equivalent to the max of each color in any handful
+in other words, it's the same information we're already saving in parse_game
+the 'power' of a set of cubes is them multiplied together
+
+map each game to the power of its minimum set
+return the sum of those powers
+
+helper: power_of(game)
+  second element of game array is hash
+  multiply values of hash together and return
+
+main
+  map each line to the power of parsing it: power_of(parse_game(line))
+  sum

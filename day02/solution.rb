@@ -31,9 +31,14 @@ def part_one(input)
   ids.sum
 end
 
+def power_of(game)
+  game[1].values.reduce(:*)
+end
+
 def part_two(input)
-  input
+  powers = input.map { |line| power_of(parse_game(line)) }
+  powers.sum
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-# append_write('output.txt', "#{part_two(ACTUAL)}\n")
+append_write('output.txt', "#{part_two(ACTUAL)}\n")
