@@ -28,13 +28,15 @@ ALGORITHM
 helper: parse_game(line)
   id = regex match digits before a `:`, convert to number!
   initialize max_colors hash, empty with default value 0
-        ---
-        handfuls = slice from just after index of `:`, then split by `;`
-        for each handful
-          get number of each color drawn
-            for each color regex match digits before color name
-          overwrite max_colors if this handful exceeds it
-        ---
+
+      ---CHANGED MIND IGNORE THIS
+      handfuls = slice from just after index of `:`, then split by `;`
+      for each handful
+        get number of each color drawn
+          for each color regex match digits before color name
+        overwrite max_colors if this handful exceeds it
+      ---END OF IGNORE
+
   OR
   unseparated handfuls = split line at `:`, second element of returned array
   for each color
@@ -50,7 +52,7 @@ helper: possible_from_bag?(game, bag)
 
 main
   hypothetical_bag hash: 12 red, 13 green, 14 blue
-  map each line to a 2-element array (helper: parse_game(line))
+  map each line to a 2-element array [id, max_colors] (helper: parse_game(line))
   filter games by possibility (helper: possible_from_bag?(game, bag))
   calculate sum of IDs
 
