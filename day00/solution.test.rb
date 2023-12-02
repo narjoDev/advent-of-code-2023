@@ -1,4 +1,3 @@
 require_relative 'solution'
 
-p EXAMPLE_ONE
-p part_one(nil)
+p part_one(EXAMPLE_ONE)
