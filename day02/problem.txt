@@ -1,0 +1,55 @@
+Part One
+
+The Game
+bag loaded with cubes: red, green, blue
+we are shown several random selections of some of the cubes
+input contains record of several games, each with an ID
+determine which games would be possible if the bag contained:
+  12 red, 13 green, 14 blue
+
+each semicolon separated handful is independent
+we only care about the highest number pulled out for each color
+
+From each line we need:
+  game ID
+  highest number pulled of each color
+
+DATA
+each line comes as a string
+  easy regex for game ID
+  part after colon is the handfuls, split by semicolons for handfuls
+    OR: regex match all instances of digits before each color
+      do separately for each color, take max
+nested hash? array with ID and hash?
+[ID, {color: max}]
+use a hash to store our maximum for selection
+
+ALGORITHM
+helper: parse_game(line)
+  id = regex match digits before a `:`, convert to number!
+  initialize max_colors hash, empty with default value 0
+        ---
+        handfuls = slice from just after index of `:`, then split by `;`
+        for each handful
+          get number of each color drawn
+            for each color regex match digits before color name
+          overwrite max_colors if this handful exceeds it
+        ---
+  OR
+  unseparated handfuls = split line at `:`, second element of returned array
+  for each color
+    scan for all numbers before that color
+    don't forget to convert strings to numbers!
+    max of matches is the max => set value in hash
+  ---
+  return array with ID, max_colors
+
+helper: possible_from_bag?(game, bag)
+  for each color in bag, return false if max from game is higher
+  return true
+
+main
+  hypothetical_bag hash: 12 red, 13 green, 14 blue
+  map each line to a 2-element array (helper: parse_game(line))
+  filter games by possibility (helper: possible_from_bag?(game, bag))
+  calculate sum of IDs
