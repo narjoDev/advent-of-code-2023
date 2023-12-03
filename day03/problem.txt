@@ -105,7 +105,7 @@ We still need to find the numbers, but they need to be associated with adjacent 
 
 ---Algorithm
 General Idea:
-  store hash of possible gears (coordinates as keys), empty array default values
+  store hash of possible gears (coordinates as keys)
   do the same sliding window to find part numbers
     while finding part numbers, check for adjacent *s and add part number to array for that gear
   select possible gears for array length 2 (exactly two adjacent part numbers)
