@@ -113,3 +113,12 @@ General Idea:
     sum of ratios
     
 
+main:
+  same sliding window algorithm, EXCEPT:
+    after checking if adjacent, instead of adding number to part_numbers...
+    scan for adjacent stars (*) and add their coordinates to a hash
+      (pass hash to helper and mutate it)
+      similar algorithm to find search window, EXCEPT:
+        instead of slicing row, iterate across indices
+        (we need to use the indices as overall coordinates)
+        key is star coordinates, value is array, push part number to array
