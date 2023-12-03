@@ -1,0 +1,81 @@
+PART ONE
+
+---Problem
+add up all the part numbers (and work out which part is missing, part two?)
+input schematic is a visual representation of the engine
+part numbers are numbers adjacent to symbols (including diagonally)
+periods are not symbols
+find the sum of all the part numbers
+
+---Examples
+
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+
+in above, all numbers except 114 and 58 are part numbers
+
+part numbers can be multiple digits, one digit adjacent to a symbol is sufficient
+multi-digit part numbers occur on the same line (horizontally)
+symbols include (possibly not limited to): *, #, +, $, -, /, =, @, %
+  probably best to match anything besides a digit or dot (.)
+assumption: dashes (-) immediately before digits are just symbols, i.e. there are no negative part numbers
+all input lines have the same length
+
+---Data Structures
+
+input: 2D array of strings
+  could use array indices as 'coordinates' for detecting adjacency
+output: integer, sum of part numbers
+intermediate...
+  could store coordinates of each symbol as 2-element array, in an array of all the symbols
+
+---Algorithm
+Approach 1:
+  first store coordinates of all symbols, then for each number check if adjacent coordinates are in symbol coordinates array
+Approach 2:
+  could 'check surroundings' each number without storing the location of the symbols
+    I need a way to treat numbers as units where only one digit needs to be adjacent to a symbol, but I store the full number
+      a sliding window would allow capturing both the range of indices and the content (this is the hardest part of the problem)
+
+main:
+  initialize empty part_numbers array
+  (sliding window)
+  for each line (row_index)
+    first_digit_index initialize 0
+    while first_digit_index < row size:
+      if this isn't a digit:
+        increment first_digit_index
+      else:
+        last_digit_index initialize first_digit_index
+        increment last_digit_index until next is not a digit or +1 would be >= size
+        number = digits in the above found range, converted to integer
+        adjacent = has_adjacent_symbol?(row_index, first_digit_index, last_digit_index)
+        if adjacent, add number to part_numbers
+        first_digit_index = last_digit_index + 2
+  return sum of part_numbers
+
+has_adjacent_symbol?(input, row_index, first_digit_index, last_digit_index)
+  search_window_top = row_index - 1, min 0
+  search_window_bottom = row_index + 1, max input size - 1
+  for inclusive range top..bottom
+    slice x row from one less than left edge (min 0) through one more than right edge (max row size - 1)
+    return true if slice has match for symbol (anything besides digits or dots)
+  return false
+
+............  8888 = number
+...xxxxxx...  xxxxxx
+...x8888x...  xxxxxx = search area
+...xxxxxx...  xxxxxx
+............
+
+----------
+
+PART TWO
