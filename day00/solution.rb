@@ -13,4 +13,4 @@ def part_two(input)
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-append_write('output.txt', "#{part_two(ACTUAL)}\n")
+# append_write('output.txt', "#{part_two(ACTUAL)}\n")
