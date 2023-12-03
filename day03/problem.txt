@@ -79,3 +79,37 @@ has_adjacent_symbol?(input, row_index, first_digit_index, last_digit_index)
 ----------
 
 PART TWO
+
+---Problem
+determine which symbols are gears (adjacent to exactly two part numbers)
+determine each gear's gear ratio (product of those two numbers)
+add up all the gear ratios
+
+---Examples
+
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
+
+Above has two gears: top left between 467 & 35, lower right between 755 & 598
+We still need to find the numbers, but they need to be associated with adjacent gears
+
+---Data Structures
+
+---Algorithm
+General Idea:
+  store hash of possible gears (coordinates as keys), empty array default values
+  do the same sliding window to find part numbers
+    while finding part numbers, check for adjacent *s and add part number to array for that gear
+  select possible gears for array length 2 (exactly two adjacent part numbers)
+    map actual gears to product of numbers
+    sum of ratios
+    
+
