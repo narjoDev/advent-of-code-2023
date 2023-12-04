@@ -1,7 +1,6 @@
 require_relative '../lib/file_utilities'
 
 EXAMPLE_ONE = lines_of(read_file('example_one.txt'))
-EXAMPLE_TWO = lines_of(read_file('example_two.txt'))
 ACTUAL = lines_of(read_file('input_actual.txt'))
 
 def parse_card(line)
@@ -13,38 +12,36 @@ def parse_card(line)
   { id:, winning:, owned: }
 end
 
-def owned_winning_numbers(card)
+def select_owned_winning_numbers(card)
   card[:owned].select { |num| card[:winning].include? num }
 end
 
-def point_value(owned_winning_cards)
-  return 0 if owned_winning_cards.empty?
-  2**(owned_winning_cards.size - 1)
+def point_value(numbers)
+  numbers.empty? ? 0 : 2**(numbers.size - 1)
 end
 
 def part_one(input)
-  cards = input.map { |line| parse_card(line) }
-  owned_winning = cards.map { |card| owned_winning_numbers(card) }
-  card_points = owned_winning.map { |numbers| point_value(numbers) }
-  card_points.sum
+  input.map { |line| parse_card(line) }
+       .map { |card| select_owned_winning_numbers(card) }
+       .map { |numbers| point_value(numbers) }
+       .sum
 end
 
-def owned_and_instances(card)
-  { winning_owned: owned_winning_numbers(card).size, instances: 1 }
+def simplify_card(card)
+  { num_winning_owned: select_owned_winning_numbers(card).size, instances: 1 }
 end
 
 def part_two(input)
-  cards = input.map { |line| owned_and_instances(parse_card(line)) }
+  cards = input.map { |line| simplify_card(parse_card(line)) }
+
   cards.each_with_index do |card, index|
-    cards_to_increment = card[:winning_owned]
-    increment = card[:instances]
-    cards_to_increment.times do |offset|
-      target_index = index + 1 + offset
-      cards[target_index][:instances] += increment
+    1.upto(card[:num_winning_owned]) do |offset|
+      target_index = index + offset
+      cards[target_index][:instances] += card[:instances]
     end
   end
-  cards.map { |card| card[:instances] }
-       .sum
+
+  cards.sum { |card| card[:instances] }
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")

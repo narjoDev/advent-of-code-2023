@@ -14,8 +14,8 @@ require_relative 'solution'
 # p(point_value([]) == 0)
 # p(point_value([48]) == 1)
 # p(point_value([48, 83, 17, 86]) == 8)
-# p(part_one(EXAMPLE_ONE) == 13)
-# p(part_one(ACTUAL) == 24175)
+p(part_one(EXAMPLE_ONE) == 13)
+p(part_one(ACTUAL) == 24175)
 
 # p(owned_and_instances({ id: 1,
 #                         winning: [41, 48, 83, 86, 17],

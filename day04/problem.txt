@@ -83,17 +83,17 @@ The input will not lead to trying to add instances of out of bounds cards
 ### Data Structures
 
 The only data we need is the order of cards, the number of winning numbers you have on a card, and the number of instances of that card.
-We could map the output from parse_card to { :winning_owned, :instances (1) } then iterate across indices of array of those
+We could map the output from parse_card to { :num_winning_owned, :instances (start at 1) } then iterate across indices of array of those
 
 ### Algorithm
 
 main:
-  parse_card, then parse with owned_and_instances
+  map input: parse_card, then transform with simplify_card
   for each with index of array of cards:
-    number of cards to increment is winning_owned of this card
+    number of cards to increment is num_winning_owned of this card
     increment those cards' instances by instances of this card
     use number of cards to increment as iterator for offset in index in cards array
-  map cards to instances and sum
+  map cards to their instances, get sum
 
-owned_and_instances:
+simplify_card:
   card to hash of owned_winning_numbers size and instances: 1
