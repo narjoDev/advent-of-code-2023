@@ -29,9 +29,23 @@ def part_one(input)
   card_points.sum
 end
 
+def owned_and_instances(card)
+  { winning_owned: owned_winning_numbers(card).size, instances: 1 }
+end
+
 def part_two(input)
-  input
+  cards = input.map { |line| owned_and_instances(parse_card(line)) }
+  cards.each_with_index do |card, index|
+    cards_to_increment = card[:winning_owned]
+    increment = card[:instances]
+    cards_to_increment.times do |offset|
+      target_index = index + 1 + offset
+      cards[target_index][:instances] += increment
+    end
+  end
+  cards.map { |card| card[:instances] }
+       .sum
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-# append_write('output.txt', "#{part_two(ACTUAL)}\n")
+append_write('output.txt', "#{part_two(ACTUAL)}\n")

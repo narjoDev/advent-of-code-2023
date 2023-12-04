@@ -63,3 +63,37 @@ numbers_to_points:
   2 => 2 (2**1)
   3 => 4 (2**2)
   4 => 8 (2**3)
+
+## PART TWO
+
+### Problem
+
+We still need to determine how many winning numbers you have from each card.
+We aren't scoring points anymore.
+For each winning number you have on a card, you gain an additional instance of that many subsequent cards.
+Go from Card 1..end. Process all instances of a card before moving to the next one.
+
+### Examples
+
+Card 1 can only have 1 instance
+The number of instances of a card will be determined by the time you process it
+  (only previous cards can increase a card's instances)
+The input will not lead to trying to add instances of out of bounds cards
+
+### Data Structures
+
+The only data we need is the order of cards, the number of winning numbers you have on a card, and the number of instances of that card.
+We could map the output from parse_card to { :winning_owned, :instances (1) } then iterate across indices of array of those
+
+### Algorithm
+
+main:
+  parse_card, then parse with owned_and_instances
+  for each with index of array of cards:
+    number of cards to increment is winning_owned of this card
+    increment those cards' instances by instances of this card
+    use number of cards to increment as iterator for offset in index in cards array
+  map cards to instances and sum
+
+owned_and_instances:
+  card to hash of owned_winning_numbers size and instances: 1
