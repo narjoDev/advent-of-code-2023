@@ -140,14 +140,13 @@ seeds, maps = parse_input
   maps = map lines of rest with parse_map(line)
     split by single new line
     first line match letters before and after `-to-` for source and destination
-      map_title = array: [source, destination]
     number_mapping: initialize empty hash
     subsequent each represent a range
-      scan for digits and convert to integers
-        0: destination, 1: source, 2: range_length
+      split by spaces and convert to integers
+        0: to_num, 1: from_num, 2: range_length
         range_length times
-          number_mapping[source] = destination (with offset for both)
-    each map returns as an array with [map_title, number_mapping]
+          number_mapping[from_num] = to_num (with offset for both)
+    each map returns as an array with [source, {destination, number_mapping}]
     convert to hash (was [[k, v], [k, v]])
 
 #### Processing
