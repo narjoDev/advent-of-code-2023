@@ -113,9 +113,12 @@ humidity-to-location map:
 array of seeds
 array of categories
 
+represent ranges as a source range and an offset amount:
+  `50 98 2` => { (98..99) => -48 }
+
 nested hash contains all maps, keys are source
   {
-    'seed' => { destination: 'soil', mapping: => { 98 => 50, 99 => 51, ... } },
+    'seed' => { destination: 'soil', mapping: => { (98..99) => -48,  } },
     'soil' => { destination: 'fertilizer', mapping: => { ... } },
     'fertilizer' => { ... },
     ...
@@ -144,8 +147,9 @@ seeds, maps = parse_input
     subsequent each represent a range
       split by spaces and convert to integers
         0: to_num, 1: from_num, 2: range_length
-        range_length times
-          number_mapping[from_num] = to_num (with offset for both)
+        offset = to_num - from_num
+        range = (from_num...from_num+length)
+        set mapping[range] => offset
     each map returns as an array with [source, {destination, number_mapping}]
     convert to hash (was [[k, v], [k, v]])
 
@@ -154,7 +158,9 @@ seeds, maps = parse_input
 fetch_mapping(from, number, main_map)
   `from` is main hash key
   value is a hash, `mapping` key returns hash
-  fetch from that hatch, if key doesn't exist return number
+  iterate through hash (keys = ranges)
+    if number in range, increment number by offset (value) & return
+  if no key matched, offset is 0, return number
 
 trace_route(seed_number, main_map)
   traveling_number = seed_number

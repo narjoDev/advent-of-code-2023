@@ -14,11 +14,11 @@ def parse_map(line)
   source, destination = heading.split[0].split("-to-")
 
   mapping = {}
-  lines.each do |range|
-    to_number, from_number, range_size = range.split.map(&:to_i)
-    range_size.times do |offset|
-      mapping[from_number + offset] = to_number + offset
-    end
+  lines.each do |range_str|
+    to_number, from_number, range_size = range_str.split.map(&:to_i)
+    offset = to_number - from_number
+    range = (from_number...from_number + range_size)
+    mapping[range] = offset
   end
   [source, { destination:, mapping: }]
 end
@@ -32,7 +32,10 @@ def parse_input(input)
 end
 
 def fetch_destination(source, number, maps)
-  maps[source][:mapping].fetch(number, number)
+  maps[source][:mapping].each do |range, offset|
+    return number + offset if range.include?(number)
+  end
+  number
 end
 
 def trace_route(seed_number, maps)
@@ -53,5 +56,5 @@ def part_two(input)
   input
 end
 
-# overwrite('output.txt', "#{part_one(ACTUAL)}\n")
+overwrite('output.txt', "#{part_one(ACTUAL)}\n")
 # append_write('output.txt', "#{part_two(ACTUAL)}\n")
