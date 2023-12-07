@@ -241,10 +241,13 @@ range_to_destination_ranges(range, mapping)
         modify with offset and push to converted_ranges
         cut out intersection and push difference to next_queue
       if none, push range to next_queue
+    END conversion_queue loop
     conversion_queue = next_queue
+  END mapping loop
 
   ranges left in queue stay the same number, put them all in converted_ranges
   converted_ranges += conversion_queue
+  merge if possible?
       
 
 #### Range Operations
@@ -306,3 +309,16 @@ difference(range1, range2) (dough, cutter)
   remove empty
   force inclusivity type
   sort by begin
+
+**Merge**
+
+merge(range1, range2)
+  raise error if not same inclusivity type
+  exclusive?
+  convert both to exclusive
+  return nil if no overlap
+  [min, min, max, max] => sort => first till last (minmax)
+  convert back if exclusive
+
+merge_many(array_of_ranges)
+  ...?
