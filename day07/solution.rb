@@ -32,22 +32,22 @@ def type_of(cards)
   end
 end
 
-# 'two' and 'high' cannot happen with any jokers in the hand
 def wild_type_of(cards)
-  # return type_of(cards) unless cards.match?('J')
-  # jokerless_counts = cards.delete('J').each_char.tally.values.sort.join
-  # # binding.pry
-  # case jokerless_counts
-  # when /^\d?$/ then 'five'
-  # when /^1\d+$/ then 'four'
-  # when '22' then 'full'
-  # when /^11(1|2)$/ then 'three'
-  # when '1111' then 'one'
-  # end
+  return type_of(cards) unless cards.match?('J')
+  jokerless_counts = cards.delete('J').each_char.tally.values.sort.join
+  case jokerless_counts
+  when /^\d?$/ then 'five'
+  when /^1\d$/ then 'four'
+  when '22' then 'full'
+  when /^11(1|2)$/ then 'three'
+  when '1111' then 'one'
+  end
+  # 'two' and 'high' cannot happen with any jokers in the hand
 
-  return 'five' if cards.chars.all?("J") # == 'JJJJJ'
-  highest_other = cards.delete('J').each_char.tally.max_by(&:last).first
-  type_of(cards.gsub("J", highest_other))
+  # Alt method:
+  # return 'five' if cards.chars.all?("J") # == 'JJJJJ'
+  # highest_other = cards.delete('J').each_char.tally.max_by(&:last).first
+  # type_of(cards.gsub("J", highest_other))
 end
 
 def compare_hands(hand1, hand2, wild: false)
@@ -83,9 +83,8 @@ end
 def part_two(input)
   hands = parse_input(input, wild: true)
           .sort { |a, b| compare_hands(a, b, wild: true) }
-  # binding.pry
   total_winnings(hands)
 end
 
-overwrite('output.txt', "#{part_one(ACTUAL)}\n")
+# overwrite('output.txt', "#{part_one(ACTUAL)}\n")
 # append_write('output.txt', "#{part_two(ACTUAL)}\n")
