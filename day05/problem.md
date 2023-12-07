@@ -287,19 +287,22 @@ difference(range1, range2) (dough, cutter)
   included_end1 = actual end
   included_end2 = actual end
   
-  return [ range1 ] if begin1 > included_end2 OR begin2 > included_end1
+  assign leftovers to return of massive if clause
+    if begin1 > included_end2 OR begin2 > included_end1
+      [ range1 ] 
   <!-- after now we know there's some overlap -->
-  return [] if range2 covers range1
+    if range2 covers range1
+      []
+    if range1 covers range2
+      [(begin1...begin2), (included_end2 + 1...included_end1 + 1)]
   
-  if dough covers cutter, scraps are (begin1...begin2), (included_end2 + 1...included_end1 + 1)
-  if either range is size 0 (e.g. (1...1)), discard
-  [ ranges ]
+    2 cases left: partial overlaps either end
+    check which by comparing beginnings
+    if begin1 < begin2
+      [ (begin1...begin2) ]
+    else
+      [ (included_end2 + 1..included_end1) ]
 
-  2 cases left: partial overlaps either end
-  check which by comparing beginnings
-  if begin1 < begin2
-    [ (begin1...begin2) ]
-  else
-    [ (included_end2 + 1..included_end1) ]
-
-  maybe store scraps as array and after all conditionals force the inclusivity type (map array)
+  remove empty
+  force inclusivity type
+  sort by begin

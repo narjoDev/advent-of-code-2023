@@ -18,6 +18,7 @@ end
 ### Intersection
 
 if test_intersection
+  p "test: intersection"
   # Covers
   p(intersection((1..10), (2..5)) == (2..5)) &&
     (intersection((1...10), (2...5)) == (2...5))
@@ -44,6 +45,7 @@ end
 ### Difference
 
 if test_difference
+  p "test: difference"
   # Covers
   p(difference((1..10), (3..6)) == [(1..2), (7..10)]) &&
     (difference((1...10), (3...6)) == [(1...3), (6...10)]) &&
