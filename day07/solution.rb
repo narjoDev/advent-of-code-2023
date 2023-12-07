@@ -8,11 +8,13 @@ ACTUAL = lines_of(read_file('input_actual.txt'))
 TYPES = %w(high one two three full four five)
 CARDS = %w(2 3 4 5 6 7 8 9 T J Q K A)
 
-def parse_input(lines)
+WILD_ORDER = %w(J 2 3 4 5 6 7 8 9 T Q K A)
+
+def parse_input(lines, wild: false)
   lines.map do |line|
     cards, bid = line.split
     bid = bid.to_i
-    type = type_of(cards)
+    type = wild ? wild_type_of(cards) : type_of(cards)
     { cards:, bid:, type: }
   end
 end
@@ -30,12 +32,34 @@ def type_of(cards)
   end
 end
 
-def compare_hands(hand1, hand2)
+# 'two' and 'high' cannot happen with any jokers in the hand
+def wild_type_of(cards)
+  # return type_of(cards) unless cards.match?('J')
+  # jokerless_counts = cards.delete('J').each_char.tally.values.sort.join
+  # # binding.pry
+  # case jokerless_counts
+  # when /^\d?$/ then 'five'
+  # when /^1\d+$/ then 'four'
+  # when '22' then 'full'
+  # when /^11(1|2)$/ then 'three'
+  # when '1111' then 'one'
+  # end
+
+  return 'five' if cards.chars.all?("J") # == 'JJJJJ'
+  highest_other = cards.delete('J').each_char.tally.max_by(&:last).first
+  type_of(cards.gsub("J", highest_other))
+end
+
+def compare_hands(hand1, hand2, wild: false)
   if hand1[:type] == hand2[:type]
     (0...hand1[:cards].size).each do |index|
       card1 = hand1[:cards][index]
       card2 = hand2[:cards][index]
-      comparison = CARDS.index(card1) <=> CARDS.index(card2)
+      comparison = if wild
+                     WILD_ORDER.index(card1) <=> WILD_ORDER.index(card2)
+                   else
+                     CARDS.index(card1) <=> CARDS.index(card2)
+                   end
       return comparison unless comparison.zero?
     end
     0 # requires duplicate hands
@@ -57,7 +81,10 @@ def part_one(input)
 end
 
 def part_two(input)
-  input
+  hands = parse_input(input, wild: true)
+          .sort { |a, b| compare_hands(a, b, wild: true) }
+  # binding.pry
+  total_winnings(hands)
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
