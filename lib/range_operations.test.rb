@@ -2,7 +2,7 @@ require_relative 'range_operations'
 
 test_inclusive = false
 test_exclusive = false
-test_intersection = false
+test_intersection = true
 test_difference = true
 
 if test_inclusive
