@@ -30,3 +30,7 @@ def intersection(range1, range2)
     (intersection_begin..intersection_end)
   end
 end
+
+def difference(_range1, _range2)
+  nil
+end
