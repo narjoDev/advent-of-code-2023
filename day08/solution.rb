@@ -30,14 +30,19 @@ end
 
 def find_cycle(node, directions, network)
   history = [node]
+  end_node = nil
+
   directions.each_char.cycle do |go|
     node = network[node]['LR'.index(go)]
-    if history.include?(node)
-      cycle = history[history.index(node)..]
-      length = cycle.length
-      steps_to_end_node = history.index { |x| x.end_with?('Z') }
-      binding.pry
-      return [length, steps_to_end_node]
+    if end_node.nil? && node.end_with?('Z')
+      end_node = node
+      history << node
+    elsif node == end_node
+      # second occurence
+      first_end_encounter = history.index(end_node)
+      cycle = history[first_end_encounter..]
+      cycle_length = cycle.size
+      return [first_end_encounter, cycle_length]
     else
       history << node
     end
@@ -46,30 +51,11 @@ end
 
 def part_two(input)
   directions, network = parse(input)
-  steps = 0
-
   here = network.keys.filter { |node| node.end_with?('A') }
   cycles = here.map { |node| find_cycle(node, directions, network) }
-  p cycles
-  # cycles.each do |cycle|
-  #   cycle[:steps] = cycle[:steps_to_end_node]
-  # end
-  # steps_taken = cycles.map { |info| info[:steps_to_end_node] }
-  until cycles.map(&:last).uniq.size == 1
-    p cycles
-    binding.pry
-  end
-  # p here
-  # directions.each_char.cycle do |go|
-  #   p go
-  #   p network.fetch_values(*here)
-  #   here = here.map { |node| network[node]['LR'.index(go)] }
-  #   p here
-  #   steps += 1
-  #   binding.pry
-  #   return steps if here.all? { |node| node.end_with?('Z') }
-  # end
+  # Make a billion assumptions about the problem
+  cycles.map(&:first).reduce(&:lcm)
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-# append_write('output.txt', "#{part_two(ACTUAL)}\n")
+append_write('output.txt', "#{part_two(ACTUAL)}\n")

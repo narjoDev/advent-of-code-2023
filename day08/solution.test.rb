@@ -11,6 +11,6 @@ require_relative 'solution'
 # p(part_one(EXAMPLE_TWO)  == 6)
 # p(part_one(ACTUAL).to_s == read_file('answer.txt').split("\n")[0])
 
-# p(part_two(EXAMPLE_THREE) == 6)
+p(part_two(EXAMPLE_THREE) == 6)
 # p(find_cycle(ACTUAL))
-p(part_two(ACTUAL))
+p(part_two(ACTUAL).to_s == read_file('answer.txt').split("\n")[1])

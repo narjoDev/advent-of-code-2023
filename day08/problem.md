@@ -115,3 +115,19 @@ stop when same
 **GAH**
 
 I totally neglected that the different directions change how you have to find a cycle.
+
+For each node, store steps between ends. When it repeats, probably cycle. Would only have more than two numbers if it crosses an end more than once in pattern.
+
+Mai says each node only ever encounters one end (**Z). If I find the first end, then find the time till it reaches it again, I have cycle length.
+
+**ACTUAL SOLUTION**
+
+Assume cycle is length of time till first occurence of end.
+
+In other words, the cycle has no tail in the beginning outside the closed loop.
+
+Find time till first end encountered for each node.
+
+Find least common multiple of all those numbers.
+
+Das it.
