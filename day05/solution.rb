@@ -1,9 +1,7 @@
 require_relative '../lib/file_utilities'
 require_relative '../lib/range_operations'
-require 'pry'
 
 EXAMPLE_ONE = (read_file('example_one.txt'))
-EXAMPLE_TWO = (read_file('example_two.txt'))
 ACTUAL = (read_file('input_actual.txt'))
 
 def parse_first_line(line)
