@@ -1,4 +1,6 @@
 require_relative '../lib/file_utilities'
+require_relative '../lib/range_operations'
+require 'pry'
 
 EXAMPLE_ONE = (read_file('example_one.txt'))
 EXAMPLE_TWO = (read_file('example_two.txt'))
@@ -52,9 +54,61 @@ def part_one(input)
   seed_locations.min
 end
 
+def parse_seed_ranges(line)
+  numbers = line.split(':')[1].split.map(&:to_i)
+  range_mins, lengths = numbers.partition.with_index { |_, i| i.even? }
+  range_mins.zip(lengths).map do |(min, length)|
+    (min...min + length)
+  end
+end
+
+def parse_simpler_map(map_line)
+  range_lines = map_line.split("\n")[1..]
+                        .map { |line| line.split.map(&:to_i) }
+  range_lines.to_h do |(to_number, from_number, range_size)|
+    offset = to_number - from_number
+    range = (from_number...from_number + range_size)
+    [range, offset]
+  end
+end
+
+def range_to_next_stage(range, mapping)
+  conversion_queue = [range]
+  converted_ranges = []
+
+  mapping.each do |source_range, offset|
+    next_queue = []
+    conversion_queue.each do |range_to_convert|
+      intersect = intersection(range_to_convert, source_range)
+      if intersect
+        converted = (intersect.min + offset..intersect.max + offset)
+        converted = force_exclusive(converted) if range_to_convert.exclude_end?
+        converted_ranges << converted
+        next_queue += difference(range_to_convert, intersect)
+      else
+        next_queue << range_to_convert
+      end
+    end
+    conversion_queue = next_queue
+  end
+
+  # anything left in queue stays same number
+  converted_ranges + conversion_queue
+end
+
 def part_two(input)
-  input
+  seed_input, *map_input = input.split(/\n\n/)
+  ranges = parse_seed_ranges(seed_input)
+  maps = map_input.map { |line| parse_simpler_map(line) }
+
+  maps.each do |stage|
+    ranges.map! { |range| range_to_next_stage(range, stage) }
+          .flatten!
+          .sort_by!(&:min)
+    ranges = merge_many(ranges)
+  end
+  ranges.first.min
 end
 
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-# append_write('output.txt', "#{part_two(ACTUAL)}\n")
+append_write('output.txt', "#{part_two(ACTUAL)}\n")
