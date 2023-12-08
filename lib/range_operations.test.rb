@@ -2,8 +2,9 @@ require_relative 'range_operations'
 
 test_inclusive = false
 test_exclusive = false
-test_intersection = true
-test_difference = true
+test_intersection = false
+test_difference = false
+test_merge_many = true
 
 if test_inclusive
   p(force_inclusive((1..10)) == (1..10)) &&
@@ -69,4 +70,16 @@ if test_difference
   # partial
   p(difference((5..10), (1..7)) == [(8..10)]) &&
     (difference((5...10), (9...12))  == [(1...9)])
+end
+
+if test_merge_many
+  p "test: merge_many"
+  # same array if no overlaps
+  p(merge_many([(1..2), (7..10), (12..12)]) == [(1..2), (7..10), (12..12)])
+  # merge some
+  p(merge_many([(1..2), (2..5), (7..10), (11..12)]) == [(1..5), (7..12)]) &&
+    (merge_many([(1...2), (2...5), (6...10)]) == [(1...5), (6...10)])
+  # initially out of order
+  p(merge_many([(1..2), (11..12), (7..10), (2..5)]) == [(1..5), (7..12)]) &&
+    (merge_many([(6...10), (2...5), (1...2)]) == [(1...5), (6...10)])
 end

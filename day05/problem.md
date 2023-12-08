@@ -321,4 +321,10 @@ merge(range1, range2)
   convert back if exclusive
 
 merge_many(array_of_ranges)
-  ...?
+  sort ranges by min (we're not going to worry about duplicate beginnings, as we don't expect any)
+  shift first range and initialize merged array containing that first element
+  iterate through the rest of the ranges
+    check current element against last element of merged
+    if overlap, reassign last element to merged range
+    else push this to merged
+  return merged
