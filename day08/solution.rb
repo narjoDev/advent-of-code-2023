@@ -49,7 +49,7 @@ def find_cycle(node, directions, network)
   end
 end
 
-def part_two(input)
+def _part_two(input)
   directions, network = parse(input)
   here = network.keys.filter { |node| node.end_with?('A') }
   cycles = here.map { |node| find_cycle(node, directions, network) }
@@ -57,5 +57,21 @@ def part_two(input)
   cycles.map(&:first).reduce(&:lcm)
 end
 
+# Make possibly even more assumptions
+def part_two(input)
+  directions, network = parse(input)
+  paths = network.keys.filter { |node| node.end_with?('A') }
+
+  steps_to_ends = paths.map do |node|
+    steps = 0
+    directions.each_char.cycle do |go|
+      node = network[node]['LR'.index(go)]
+      steps += 1
+      break steps if node.end_with?('Z')
+    end
+  end
+  steps_to_ends.reduce(&:lcm)
+end
+
 overwrite('output.txt', "#{part_one(ACTUAL)}\n")
-append_write('output.txt', "#{part_two(ACTUAL)}\n")
+# append_write('output.txt', "#{part_two(ACTUAL)}\n")
