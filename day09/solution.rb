@@ -27,8 +27,20 @@ def part_one(input)
            .sum
 end
 
+def extrapolate_previous(history)
+  sequences = [history]
+  until sequences.last.all?(0)
+    sequences << differences_between(sequences.last)
+  end
+  sequences.map(&:first)
+           .reverse
+           .reduce { |difference, num| num - difference }
+end
+
 def part_two(input)
-  input
+  histories = parse_input(input)
+  histories.map { |history| extrapolate_previous(history) }
+           .sum
 end
 
 # overwrite('output.txt', "#{part_one(ACTUAL)}\n")

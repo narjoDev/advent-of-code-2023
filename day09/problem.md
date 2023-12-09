@@ -77,7 +77,46 @@ part_one main:
   sum
 ```
 
+## Part Two
 
+### Problem
+
+- This time we need to extrapolate backwards, the previous value
+- Still return sum of previous extrapolated values
+
+### Examples
+
+```
+5 <= 10  13  16  21  30  45
+  5 <=  3   3   5   9  15
+   -2 <=  0   2   4   6
+      2 <=  2   2   2
+        0 <=  0   0
+```
+
+- Notice once we find all the sequences, we only care about the first values
+- We do subtraction this time, but not exactly from the bottom up
+  - It is from the bottom up, except we subtract the lower number from the upper number
+
+```
+2 - 0 => 2
+0 - 2 => -2
+3 - -2 => 5
+10 - 5 => 5
+```
+
+### Algorithm
+
+- We can keep the same way of finding difference sequences
+- map sequences to their first values (gives us a non nested array of integers)
+
+`[10, 3, 0, 2, 0]`
+
+- Reduce backwards (reverse.reduce)
+
+`[0, 2, 0, 3, 10].reduce`
+
+element - memo
 
 
 
