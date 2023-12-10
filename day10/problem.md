@@ -94,6 +94,12 @@ move(north) => coordinates[:y] -= 1
 ```
 SHAPE_DIRECTIONS hash, see above
 
+get_connections(shape)
+  make this a hash instead
+
+opposite(direction):
+  make this a hash instead
+
 
 locate_start:
   iterate through rows (y)
@@ -105,14 +111,6 @@ get_start_direction:
   for north, south, east, west:
     if direction in bounds:
       if connected opposite, return (i.e. if north has south connection, return north)
-
-
-get_connections(coordinates)
-  access hash
-
-
-opposite(direction):
-  ...
 
 
 move!(location, direction)

@@ -1,6 +1,3 @@
-require_relative '../lib/file_utilities'
-require 'pry'
-
 EXAMPLE_ONE = (File.read('example_one.txt')).split(/\n/)
 EXAMPLE_TWO = (File.read('example_two.txt')).split(/\n/)
 ACTUAL = (File.read('input_actual.txt')).split(/\n/)
