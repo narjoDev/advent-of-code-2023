@@ -33,7 +33,7 @@ def scan_x_y_coord_lists(input)
     indices = row.each_char.map.with_index do |char, idx|
       char == '#' ? idx : nil
     end
-                 .reject(&:nil?)
+                 .compact
     x += indices
     y += [index] * indices.size
   end
@@ -51,8 +51,32 @@ def part_one(input)
   sum_shortest_lengths(x, y)
 end
 
+def find_empty_rows_cols(image)
+  y = (0...image.size).reject { |row_idx| image[row_idx].match?('#') }
+  x = (0...image[0].size).reject do |col_idx|
+    image.any? do |row|
+      row[col_idx] == '#'
+    end
+  end
+  [x, y]
+end
+
+def apply_offset!(target, empties, empty_size: 1000000)
+  target.map! do |galaxy_index|
+    # number of empties to left/above
+    empties_before = empties.count { |empty_index| empty_index < galaxy_index }
+    # 1 becomes 1,000,000 i.e. +999,999
+    offset = empty_size - 1
+    galaxy_index + (offset * empties_before)
+  end
+end
+
 def part_two(input)
-  input
+  empty_x, empty_y = find_empty_rows_cols(input)
+  x, y = scan_x_y_coord_lists(input)
+  apply_offset!(x, empty_x)
+  apply_offset!(y, empty_y)
+  sum_shortest_lengths(x, y)
 end
 
 # overwrite('output.txt', "#{part_one(ACTUAL)}\n")
