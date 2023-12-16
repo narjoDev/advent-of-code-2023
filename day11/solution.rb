@@ -40,9 +40,18 @@ def scan_x_y_coord_lists(input)
   [x, y]
 end
 
-def sum_shortest_lengths(x_coords, y_coords)
+def _sum_shortest_lengths(x_coords, y_coords)
   x_coords.combination(2).sum { |a, b| (a - b).abs } +
     y_coords.combination(2).sum { |a, b| (a - b).abs }
+end
+
+def sum_shortest_lengths(x_coords, y_coords)
+  x_coords.sort.map.with_index { |coord, index|
+    coord * ((2 * index) - x_coords.size + 1)
+  }.sum +
+    y_coords.sort.map.with_index do |coord, index|
+      coord * ((2 * index) - y_coords.size + 1)
+    end.sum
 end
 
 def part_one(input)
