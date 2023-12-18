@@ -54,12 +54,14 @@ row_possibilities(row with unknowns as string, sizes as array of integers)
   known_damaged = count in string
   unknown_damaged = total_damaged - known_damaged
   unknown_operational = unknown - unknown_damaged
-  unknown_springs = []
-    insert unknown_damaged times `#`
-    insert unknown_operational times `.`
-  unknown_springs UNIQUE permutations count
-    perm each char replace first ? in row => perm
-    join perm to string, correct_groups?
+
+  unknown_indices = (0...row.size).select char is '?'
+  possible_damages = unknown_indices combination(unknown_damaged)
+  combinations count |ordering|
+    try_row = dup
+    replace indices of ordering with '#'
+    replace rest of '?' with '.'
+    correct_groups?
 
 part_one(file as array of lines)
   map lines with parse_input
@@ -67,3 +69,8 @@ part_one(file as array of lines)
   sum
 
 ```
+
+#### Rework / Avoid Permutations
+
+- Use combination for N choose K (unknown choose unknown_damaged).
+- Get indices of unknowns, choose K of them to make damaged.

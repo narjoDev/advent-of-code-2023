@@ -13,19 +13,13 @@ def correct_groups?(row, sizes)
 end
 
 def row_possibilities(row, sizes)
-  unknown = row.count('?')
-  total_damaged = sizes.sum
-  known_damaged = row.count('#')
-  unknown_damaged = total_damaged - known_damaged
-  unknown_operational = unknown - unknown_damaged
+  unknown_damaged = sizes.sum - row.count('#')
+  unknown_indices = (0...row.size).select { |index| row[index] == '?' }
 
-  springs = []
-  unknown_damaged.times { springs << '#' }
-  unknown_operational.times { springs << '.' }
-
-  springs.permutation.uniq.count do |ordering|
+  unknown_indices.combination(unknown_damaged).count do |damage_indices|
     try_row = row.dup
-    try_row.sub!('?', ordering.shift) until ordering.empty?
+    damage_indices.each { |idx| try_row[idx] = '#' }
+    try_row.gsub!('?', '.')
     correct_groups?(try_row, sizes)
   end
 end
@@ -33,7 +27,6 @@ end
 def part_one(input)
   lines = input.map { |line| parse_input(line) }
   line_possibilities = lines.map { |line| row_possibilities(*line) }
-  # binding.pry
   line_possibilities.sum
 end
 
