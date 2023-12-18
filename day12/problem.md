@@ -74,3 +74,9 @@ part_one(file as array of lines)
 
 - Use combination for N choose K (unknown choose unknown_damaged).
 - Get indices of unknowns, choose K of them to make damaged.
+
+## Part Two
+
+- Before counting possibilities, we need to "unfold" the records
+- Spring conditions become five copies separated by `?`
+- Group sizes become five copies separated by `,`

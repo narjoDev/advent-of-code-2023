@@ -30,8 +30,20 @@ def part_one(input)
   line_possibilities.sum
 end
 
+def unfold(line_str)
+  row, sizes = line_str.split
+  row = ([row] * 5).join('?')
+  sizes = ([sizes] * 5).join(',')
+  "#{row} #{sizes}"
+end
+
 def part_two(input)
-  input
+  lines = input.map { |line| parse_input(unfold(line)) }
+  line_possibilities = lines.map.with_index do |line, idx|
+    puts idx
+    row_possibilities(*line)
+  end
+  line_possibilities.sum
 end
 
 # overwrite('output.txt', "#{part_one(ACTUAL)}\n")
