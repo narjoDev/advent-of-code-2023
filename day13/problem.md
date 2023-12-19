@@ -61,3 +61,26 @@ pattern_score(pattern array of strings)
     test indices as above
     if so return index
 ```
+
+## Part Two
+
+- Each pattern needs to be changed
+- Swap a single point to the opposite type
+- There will only be one valid swap resulting in a reflection
+
+- Split into patterns
+- For each pattern...
+  - Iterate across all characters
+    - If swap results in score, return
+
+```
+smudge_score(pattern)
+  each row index...
+    each char index...
+      dup, swap char, try
+```
+
+- **The original mirror may still be valid after the correct swap. Ignore it!**
+- Need a way to prevent it finding the same line as in the original
+  - require it be different???
+  - pass forbidden value to scorer and skip that mirror line

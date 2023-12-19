@@ -33,6 +33,28 @@ p([
   (part_one(ACTUAL).to_s == File.read('answer.txt').split(/\n/)[0])
 ].all?)
 
+p([
+  (part_two(EXAMPLE_ONE) == 400)
+].all?)
+
+pattern_3 = [
+  '...######....##',
+  '#..#....#..##.#',
+  '#..#....#..##.#',
+  '...######....##',
+  '#.#..##..#.#.#.',
+  '#.#.#..#.#.#...',
+  '#####..#######.',
+  '#....##....###.',
+  '#...#..#...##..',
+  '#.#..###.#.#.#.',
+  '.#.#....#.#.#.#'
+]
+
+p(smudge_score(pattern_3) == 6)
+
+p(part_two(ACTUAL).to_s == File.read('answer.txt').split(/\n/)[1])
+
 # Output
 
 write_parts = 0
