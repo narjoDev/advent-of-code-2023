@@ -21,14 +21,19 @@ def parse_input(input)
   [workflows, parts]
 end
 
+def parse_rule(rule)
+  regex = /([xmas])([<>])(\d+):(\w+)/
+  key, operator, value, destination = rule.match(regex).captures
+  value = value.to_i
+  [key, operator, value, destination]
+end
+
 def workflow_accepts?(workflow_name, part, workflows)
   rules = workflows[workflow_name]
 
   rules.each do |rule|
     if rule.match?(':')
-      regex = /([xmas])([<>])(\d+):(\w+)/
-      key, operator, value, destination = rule.match(regex).captures
-      value = value.to_i
+      key, operator, value, destination = parse_rule(rule)
       condition_met = operator == '<' ? part[key] < value : part[key] > value
       next unless condition_met
     else
@@ -59,13 +64,6 @@ def combinations(part_range)
   part_range.values.map(&:size).reduce(:*)
 end
 
-def parse_rule(rule)
-  regex = /([xmas])([<>])(\d+):(\w+)/
-  key, operator, value, destination = rule.match(regex).captures
-  value = value.to_i
-  [key, operator, value, destination]
-end
-
 def split_range(rule, part_range)
   key, operator, value, = parse_rule(rule)
   tested_range = part_range[key]
@@ -75,12 +73,10 @@ def split_range(rule, part_range)
   if tested_range.max < upper_min || tested_range.min > lower_max
     [part_range]
   else
-    target_lower_split = (tested_range.min..lower_max)
-    target_upper_split = (upper_min..tested_range.max)
     lower = part_range.dup
     upper = part_range.dup
-    lower[key] = target_lower_split
-    upper[key] = target_upper_split
+    lower[key] = (tested_range.min..lower_max)
+    upper[key] = (upper_min..tested_range.max)
     [lower, upper]
   end
 end
@@ -102,7 +98,6 @@ def count_accepted(workflow_name, part_range, workflows)
     if rule.match?(':') # there's a condition
       partitions = split_range(rule, part_range)
       if partitions.size == 1 # range wasn't split
-        # process the range
         destination = get_destination(rule, part_range)
         next unless destination
       else # call again on each => they won't split on this rule
@@ -110,7 +105,7 @@ def count_accepted(workflow_name, part_range, workflows)
                  count_accepted(workflow_name, range, workflows)
                end
       end
-    else
+    else # no condition, set destination
       destination = rule
     end
 
