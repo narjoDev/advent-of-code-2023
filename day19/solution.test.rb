@@ -12,6 +12,17 @@ p([
   (part_one(ACTUAL).to_s == File.read('answer.txt').split(/\n/)[0])
 ].all?)
 
+# full_range = { 'x' => (1..4000), 'm' => (1..4000), 'a' => (1..4000),
+#                's' => (1..4000) }
+# p([
+#   (combinations(full_range) == 4000**4)
+# ].all?)
+
+p([
+  (part_two(EXAMPLE_ONE) == 167409079868000),
+  (part_two(ACTUAL).to_s == File.read('answer.txt').split(/\n/)[1])
+].all?)
+
 # Output
 
 write_parts = 0

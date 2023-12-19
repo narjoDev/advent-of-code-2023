@@ -23,6 +23,7 @@ end
 
 def workflow_accepts?(workflow_name, part, workflows)
   rules = workflows[workflow_name]
+
   rules.each do |rule|
     if rule.match?(':')
       regex = /([xmas])([<>])(\d+):(\w+)/
@@ -54,6 +55,76 @@ end
 
 # Part Two
 
+def combinations(part_range)
+  part_range.values.map(&:size).reduce(:*)
+end
+
+def parse_rule(rule)
+  regex = /([xmas])([<>])(\d+):(\w+)/
+  key, operator, value, destination = rule.match(regex).captures
+  value = value.to_i
+  [key, operator, value, destination]
+end
+
+def split_range(rule, part_range)
+  key, operator, value, = parse_rule(rule)
+  tested_range = part_range[key]
+  lower_max = operator == '<' ? value - 1 : value
+  upper_min = lower_max + 1
+
+  if tested_range.max < upper_min || tested_range.min > lower_max
+    [part_range]
+  else
+    target_lower_split = (tested_range.min..lower_max)
+    target_upper_split = (upper_min..tested_range.max)
+    lower = part_range.dup
+    upper = part_range.dup
+    lower[key] = target_lower_split
+    upper[key] = target_upper_split
+    [lower, upper]
+  end
+end
+
+def get_destination(rule, part_range)
+  key, operator, value, destination = parse_rule(rule)
+
+  condition_met = case operator
+                  when '<' then part_range[key].max < value
+                  when '>' then part_range[key].min > value
+                  end
+  condition_met ? destination : nil
+end
+
+def count_accepted(workflow_name, part_range, workflows)
+  rules = workflows[workflow_name]
+
+  rules.each do |rule|
+    if rule.match?(':') # there's a condition
+      partitions = split_range(rule, part_range)
+      if partitions.size == 1 # range wasn't split
+        # process the range
+        destination = get_destination(rule, part_range)
+        next unless destination
+      else # call again on each => they won't split on this rule
+        return partitions.sum do |range|
+                 count_accepted(workflow_name, range, workflows)
+               end
+      end
+    else
+      destination = rule
+    end
+
+    case destination
+    when 'A' then return combinations(part_range)
+    when 'R' then return 0
+    else return count_accepted(destination, part_range, workflows)
+    end
+  end
+end
+
 def part_two(input)
-  input
+  workflows = parse_input(input)[0]
+  full_range = { 'x' => (1..4000), 'm' => (1..4000), 'a' => (1..4000),
+                 's' => (1..4000) }
+  count_accepted('in', full_range, workflows)
 end
