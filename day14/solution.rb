@@ -1,3 +1,4 @@
+require 'pry'
 ACTUAL = (File.read('input_actual.txt')).split(/\n/)
 
 # Part One
@@ -41,6 +42,26 @@ end
 
 # Part Two
 
-def part_two(input)
-  input
+def spin(grid, times = 1)
+  loads = []
+  1.upto(times) do |i|
+    north = tilt_up(grid)
+    west = tilt_up(north.transpose).transpose
+    south = tilt_up(west.reverse).reverse
+    east = tilt_up(south.transpose.reverse).reverse.transpose
+    grid = east
+    l = load_of(grid)
+    loads << l
+    puts "i:#{i % 59}, l:#{l}"
+  end
+  puts loads.length
+  puts loads.uniq.length
+  binding.pry
+  grid
+end
+
+def part_two(input, cycles = 1000000000)
+  grid = input.map(&:chars)
+  grid = spin(grid, cycles)
+  load_of(grid)
 end
